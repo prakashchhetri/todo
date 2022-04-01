@@ -1,0 +1,52 @@
+version: '3'
+services:
+
+    #PHP Service
+    app:
+        build:
+            context: .
+            dockerfile: ./docker/PHP/Dockerfile
+        container_name: "${APP_NAME}_app"
+        restart: unless-stopped
+        tty: true
+        working_dir: /var/www/html
+        volumes:
+            - .:/var/www/html
+        networks:
+            - app-network
+
+    #nginx Service
+    webserver:
+        image: nginx:alpine
+        container_name: "${APP_NAME}_webserver"
+        restart: unless-stopped
+        tty: true
+        volumes:
+            - ./:/var/www/html
+            - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
+        ports:
+            - "80:80"
+            - "443:443"
+        networks:
+            - app-network
+
+    #MySQL Service
+    db:
+        image: mariadb:10.6
+        container_name: "${APP_NAME}_database"
+        restart: unless-stopped
+        tty: true
+        ports:
+            - "3306:3306"
+        environment:
+            MYSQL_DATABASE: "${DB_DATABASE}"
+            MYSQL_USER: "${DB_USERNAME}"
+            MYSQL_PASSWORD: "${DB_PASSWORD}"
+            MYSQL_ROOT_PASSWORD: "${DB_PASSWORD}"
+        networks:
+            - app-network
+
+#Docker Networks
+networks:
+    app-network:
+        driver: bridge
