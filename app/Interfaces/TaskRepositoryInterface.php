@@ -8,34 +8,41 @@ interface TaskRepositoryInterface
 {
 
     /**
+     * Count of tasks to be returned per page
+     *
+     * @var int
+     */
+    const COUNT_PER_PAGE = 10;
+
+    /**
      * @return mixed
      */
     public function getAllTasks();
 
     /**
-     * @param $taskId
+     * @param $id
      * @return mixed
      */
-    public function getTaskById($taskId);
+    public function getTaskById($id);
 
     /**
-     * @param $taskId
+     * @param $id
      * @return mixed
      */
-    public function deleteTask($taskId);
+    public function deleteTask($id);
 
     /**
-     * @param  array  $task
+     * @param  array  $attributes
      * @return mixed
      */
-    public function createTask(array $task);
+    public function createTask(array $attributes);
 
     /**
-     * @param $taskId
-     * @param  array  $task
+     * @param $id
+     * @param  array  $attributes
      * @return mixed
      */
-    public function updateTask($taskId, array $task);
+    public function updateTask($id, array $attributes);
 
     /**
      * @return mixed

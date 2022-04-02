@@ -21,8 +21,4 @@ class Task extends Model
         return $this->belongsTo('App\Models\User');
     }
 
-    public static function completed()
-    {
-        return self::where('is_completed', 1)->get();
-    }
 }

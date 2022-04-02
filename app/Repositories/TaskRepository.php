@@ -7,38 +7,64 @@ namespace App\Repositories;
 use App\Interfaces\TaskRepositoryInterface;
 use App\Models\Task;
 
+/**
+ * class TaskRepository
+ */
 class TaskRepository implements TaskRepositoryInterface
 {
 
-    private const COUNT_PER_PAGE = 10;
+    protected Task $model;
 
+    public function __construct(Task $task)
+    {
+        $this->model = $task;
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function getAllTasks()
     {
-        return Task::paginate(self::COUNT_PER_PAGE);
+        return $this->model->paginate(self::COUNT_PER_PAGE);
     }
 
-    public function getTaskById($taskId)
+    /**
+     * @inheritDoc
+     */
+    public function getTaskById($id)
     {
-        return Task::findOrFail($taskId);
+        return $this->model->findOrFail($id);
     }
 
-    public function deleteTask($taskId)
+    /**
+     * @inheritDoc
+     */
+    public function deleteTask($id)
     {
-        Task::destroy($taskId);
+        return $this->model->destroy($id);
     }
 
-    public function createTask(array $task)
+    /**
+     * @inheritDoc
+     */
+    public function createTask(array $attributes)
     {
-        return Task::create($task);
+        return $this->model->create($attributes);
     }
 
-    public function updateTask($taskId, array $task)
+    /**
+     * @inheritDoc
+     */
+    public function updateTask($id, array $attributes)
     {
-        return Task::whereId($taskId)->update($task);
+        return $this->model->where('id', $id)->update($attributes);
     }
 
+    /**
+     * @inheritDoc
+     */
     public function getCompletedTasks()
     {
-        return Task::completed();
+        return $this->model->where('is_completed', 1)->get();
     }
 }
